@@ -461,7 +461,7 @@ private resolveProjectIdentifiers(script, descriptorUtils, config) {
             case 'golang':
                 println "In case golang"
                 println script.commonPipelineEnvironment.getGitHttpsUrl()
-                gav = descriptorUtils.getGoGAV(config.buildDescriptorFile, new URI(script.commonPipelineEnvironment.getGitHttpsUrl()))
+                gav = descriptorUtils.getGoGAV(config.buildDescriptorFile)
                 break
             case 'dub':
                 gav = descriptorUtils.getDubGAV(config.buildDescriptorFile)
