@@ -367,6 +367,7 @@ private def triggerWhitesourceScanWithUserKey(script, config, utils, descriptorU
                 println(config.buildDescriptorFile.lastIndexOf('/') +1)
                 println(config.buildDescriptorFile.substring(0, config.buildDescriptorFile.lastIndexOf('/') + 1))
                 def path = config.buildDescriptorFile.substring(0, config.buildDescriptorFile.lastIndexOf('/') + 1)
+                println(path)
                 resolveProjectIdentifiers(script, descriptorUtils, config)
 
                 def projectName = "${config.whitesource.projectName}${config.whitesource.productVersion?' - ':''}${config.whitesource.productVersion?:''}".toString()
@@ -444,6 +445,7 @@ private def triggerWhitesourceScanWithUserKey(script, config, utils, descriptorU
 }
 
 private resolveProjectIdentifiers(script, descriptorUtils, config) {
+    println("In resolvePrjectIndentifiers")
     if (!config.whitesource.projectName || !config.whitesource.productVersion) {
         def gav
         switch (config.scanType) {
@@ -457,6 +459,8 @@ private resolveProjectIdentifiers(script, descriptorUtils, config) {
                 gav = descriptorUtils.getPipGAV(config.buildDescriptorFile)
                 break
             case 'golang':
+                println "In case golang"
+                println script.commonPipelineEnvironment.getGitHttpsUrl()
                 gav = descriptorUtils.getGoGAV(config.buildDescriptorFile, new URI(script.commonPipelineEnvironment.getGitHttpsUrl()))
                 break
             case 'dub':
@@ -467,13 +471,18 @@ private resolveProjectIdentifiers(script, descriptorUtils, config) {
                 break
         }
 
+        println "Check if projectName is not configured"
+        println config.whitesource.projectName
         if(!config.whitesource.projectName)
             config.whitesource.projectName = "${gav.group?:''}${gav.group?'.':''}${gav.artifact}"
 
         def versionFragments = gav.version?.tokenize('.')
         def version = versionFragments?.size() > 0 ? versionFragments?.head() : null
+        println "println version"
+        println version
         if(version && !config.whitesource.productVersion)
             config.whitesource.productVersion = version
+        println config.whitesource.productVersion
     }
 }
 
