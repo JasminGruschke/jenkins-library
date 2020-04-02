@@ -462,7 +462,9 @@ private resolveProjectIdentifiers(script, descriptorUtils, config) {
                 println "In case golang"
                 println script.commonPipelineEnvironment.getGitHttpsUrl()
                 println script.commonPipelineEnvironment.getValue('gitHttpsUrl')
-                gav = descriptorUtils.getGoGAV(config.buildDescriptorFile, script.commonPipelineEnvironment.getValue('gitHttpsUrl'))
+                def gitHubHttps = "https://github.tools.sap/abapcp/instance-quota-operator"
+//                gav = descriptorUtils.getGoGAV(config.buildDescriptorFile, script.commonPipelineEnvironment.getValue('gitHttpsUrl'))
+                gav = descriptorUtils.getGoGAV(config.buildDescriptorFile, gitHubHttps)
                 break
             case 'dub':
                 gav = descriptorUtils.getDubGAV(config.buildDescriptorFile)
